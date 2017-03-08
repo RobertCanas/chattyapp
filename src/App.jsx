@@ -8,22 +8,27 @@ class App extends Component {
     super(props);
       this.state = {
           currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-          messages: [{
-            username: "Bob",
-            content: "Has anyone seen my marbles?",
-          },
-          {
-            username: "Anonymous",
-            content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-          }]
+          messages: []
         };
-      this.addNewMessage= this.addNewMessage.bind(this);
+      // this.addNewMessage= this.addNewMessage.bind(this);
+      this.sendMessageServer= this.sendMessageServer.bind(this);
   }
 
-   addNewMessage(name, content) {
+  //  addNewMessage(name, content) {
+
+  //   // const messages = this.state.messages.concat(newMessage);
+
+  //   this.setState({messages: messages});
+  // }
+
+  componentDidMount() {
+    this.socket = new WebSocket('ws://localhost:3001');
+    console.log('Connected to server');
+  }
+
+  sendMessageServer(name, content) {
     const newMessage = {username: name, content: content};
-    const messages = this.state.messages.concat(newMessage);
-    this.setState({messages: messages});
+    this.socket.send(JSON.stringify(newMessage));
   }
 
   render() {
@@ -33,7 +38,7 @@ class App extends Component {
       <a href="/" className="navbar-brand">Chatty</a>
     </nav>
       <MessageList messages={this.state.messages} />
-      <ChatBar user={this.state.currentUser.name} newAddedMessage={this.addNewMessage}/>
+      <ChatBar user={this.state.currentUser.name} newAddedMessage={this.sendMessageServer}/>
     </div>
     );
   }
