@@ -17,6 +17,13 @@ class App extends Component {
             content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
           }]
         };
+      this.addNewMessage= this.addNewMessage.bind(this);
+  }
+
+   addNewMessage(name, content) {
+    const newMessage = {username: name, content: content};
+    const messages = this.state.messages.concat(newMessage);
+    this.setState({messages: messages});
   }
 
   render() {
@@ -26,7 +33,7 @@ class App extends Component {
       <a href="/" className="navbar-brand">Chatty</a>
     </nav>
       <MessageList messages={this.state.messages} />
-      <ChatBar user={this.state.currentUser.name} />
+      <ChatBar user={this.state.currentUser.name} newAddedMessage={this.addNewMessage}/>
     </div>
     );
   }
