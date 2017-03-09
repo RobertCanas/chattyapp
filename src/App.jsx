@@ -8,7 +8,8 @@ class App extends Component {
     super(props);
       this.state = {
           currentUser: {name: ""}, // optional. if currentUser is not defined, it means the user is Anonymous
-          messages: []
+          messages: [],
+          clients: 0
         };
       // this.addNewMessage= this.addNewMessage.bind(this);
       this.sendMessageServer= this.sendMessageServer.bind(this);
@@ -30,7 +31,7 @@ class App extends Component {
     console.log('Connected to server');
     };
 
-    this.HandlerReceiveMessage();
+    this.handlerReceiveMessage();
 
   }
 
@@ -48,7 +49,7 @@ class App extends Component {
     }
   }
 
-  HandlerReceiveMessage() {
+  handlerReceiveMessage() {
     const receiveMsg = (event) => {
       const data = JSON.parse(event.data);
       console.log(data);
@@ -61,13 +62,15 @@ class App extends Component {
         case "incomingNotification":
           this.setState({messages: messages});
           break;
+        case "clientCount":
+          this.setState({clients: data.clients});
+          break;
         default:
 
           throw new Error("Unknown event type " + data.type);
       }
     };
     this.socket.onmessage = receiveMsg;
-
   }
 
 
@@ -77,7 +80,7 @@ class App extends Component {
     <div>
     <nav className="navbar">
       <a href="/" className="navbar-brand">Chatty</a>
-      <p className="user-count">user(s) online</p>
+      <p className="user-count">{this.state.clients} user(s) online</p>
     </nav>
       <MessageList messages={this.state.messages} />
       <ChatBar user={this.state.currentUser.name} nameChange={this.handlerNameChange} newAddedMessage={this.sendMessageServer}/>

@@ -64,8 +64,7 @@
     .navbar {
       background: tomato;
       border-bottom: 1px solid black;
-      display: flex;
-      justify-content: space-between;
+      display: block;
       height: 60px;
       left: 0;
       padding: 0 10px;
@@ -84,4 +83,9 @@
       line-height: 60px;
       padding: 0 10px;
       text-decoration: none;
+    }
+
+    .user-count{
+      float: right;
+      line-height: 30px;
     }
