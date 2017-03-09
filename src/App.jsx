@@ -7,7 +7,7 @@ class App extends Component {
   constructor(props) {
     super(props);
       this.state = {
-          currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+          currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
           messages: []
         };
       // this.addNewMessage= this.addNewMessage.bind(this);
@@ -24,11 +24,25 @@ class App extends Component {
   componentDidMount() {
     this.socket = new WebSocket('ws://localhost:3001');
     console.log('Connected to server');
+    this.setAHandlerForWhenAMessageIsReceived();
   }
 
   sendMessageServer(name, content) {
     const newMessage = {username: name, content: content};
     this.socket.send(JSON.stringify(newMessage));
+  }
+
+  setAHandlerForWhenAMessageIsReceived() {
+    const receiveMsg = (event) => {
+      console.log(event.data);
+      // code to handle incoming message
+
+      const messages = this.state.messages.concat(JSON.parse(event.data));
+      this.setState({messages: messages});
+    };
+
+    this.socket.onmessage = receiveMsg;
+
   }
 
   render() {
