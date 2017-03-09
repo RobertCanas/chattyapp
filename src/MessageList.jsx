@@ -11,11 +11,14 @@ class MessageList extends Component {
     return (
       <main className="messages">
         {this.props.messages.map((contentData, i) => {
-          return <Message key={i} body={contentData}/>;
-          })
-        }
-        <div className="message system">
-        </div>
+          switch(contentData.type) {
+            case "incomingMessage":
+              return <Message key={i} body={contentData}/>;
+            case "incomingNotification":
+            console.log(contentData.content);
+              return <div key={i} className="message system">{contentData.content}</div>;
+      }
+      })}
       </main>
       )
   }
