@@ -7,21 +7,14 @@ class App extends Component {
   constructor(props) {
     super(props);
       this.state = {
-          currentUser: {name: ""}, // optional. if currentUser is not defined, it means the user is Anonymous
+          currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
           messages: [],
-          clients: 0
+          clients: 0,
+          color: "#000000"
         };
-      // this.addNewMessage= this.addNewMessage.bind(this);
       this.sendMessageServer= this.sendMessageServer.bind(this);
       this.handlerNameChange= this.handlerNameChange.bind(this);
   }
-
-  //  addNewMessage(name, content) {
-
-  //   // const messages = this.state.messages.concat(newMessage);
-
-  //   this.setState({messages: messages});
-  // }
 
   componentDidMount() {
     console.log("componentDidMount <App />")
@@ -36,9 +29,7 @@ class App extends Component {
   }
 
   sendMessageServer(name, content) {
-    //const newMessage = {type: 'postMessage', username: name, content: content};
-    console.log(this.socket);
-    this.socket.send(JSON.stringify({type: 'postMessage', username: name, content: content}));
+    this.socket.send(JSON.stringify({type: 'postMessage', username: name, content: content, color: this.state.color}));
   }
 
   handlerNameChange(name) {
@@ -52,7 +43,6 @@ class App extends Component {
   handlerReceiveMessage() {
     const receiveMsg = (event) => {
       const data = JSON.parse(event.data);
-      console.log(data);
       const messages = this.state.messages.concat(data);
 
       switch(data.type) {
@@ -64,6 +54,9 @@ class App extends Component {
           break;
         case "clientCount":
           this.setState({clients: data.clients});
+          break;
+        case "setColor":
+          this.setState({color: data.color});
           break;
         default:
 

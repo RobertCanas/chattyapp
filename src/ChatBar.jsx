@@ -8,8 +8,6 @@ class ChatBar extends Component {
       content: ''
     };
   }
-// condition ? firstoption:secondoption
-// name ? "anonymous" : this.state.username
   handleUserChangeName(event) {
     if (event.key == 'Enter') {
       this.props.nameChange(this.state.username, this.state.content);

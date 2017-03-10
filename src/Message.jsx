@@ -5,11 +5,22 @@ class Message extends Component {
     super(props);
   }
   render() {
+    const style={color: this.props.body.color};
+    const urlEx= /(https?:\/\/[^\s]+.(?:png|jpg|gif))/gi;
+    const match= urlEx.exec(this.props.body.content);
+    const content= this.props.body.content.replace(urlEx, "");
+    let url;
+    if (match) {
+      url = match[0];
+    }
     return (
       <div className="message">
-        <span className="message-username">{this.props.body.username}</span>
-        <span className="message-content">{this.props.body.content}</span>
-      </div>
+        <span className="message-username" style={style}>{this.props.body.username}</span>
+        <div className="img">
+          <span className="message-content">{content}</span>
+          {url ? <img src={url}/> : ""}
+          </div>
+        </div>
       )
   }
 }
